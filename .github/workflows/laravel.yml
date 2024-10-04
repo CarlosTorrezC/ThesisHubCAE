@@ -35,6 +35,13 @@ jobs:
         APP_ENV: production
         APP_DEBUG: false
       run: php artisan migrate --force
+      # 2. Configurar la clave SSH para Git
+    - name: Set up SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.HEROKU_SSH_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -t rsa heroku.com >> ~/.ssh/known_hosts
     - name: instalar heroku cli
       run: curl https://cli-assets.heroku.com/install.sh | sh
     - name: Deploy to Heroku
